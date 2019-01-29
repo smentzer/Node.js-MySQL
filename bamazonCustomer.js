@@ -19,12 +19,14 @@ var connection = mysql.createConnection({
   password: process.env.MYSQL_PASSWORD,
   database: "bamazonDB"
 });
+
 connection.connect(function(err) {
   if (err) throw err;
   console.log("connected as id " + connection.threadId);
   //display all of the items
   afterConnected();
 });
+
 //display all of the items available for sale. Include the ids, names, and prices of products for sale.
 function afterConnected() {
   connection.query("SELECT * FROM products", function(err, res) {
@@ -58,11 +60,10 @@ function itemPurchase(){
       name: "id",
       message: "What item would you like to purchase?",
       validate: function(value) {
-        if (isNaN(value) === false && parseInt(value) > 0 && parseInt(value) <= 10) {
+        if (isNaN(value) === false) {
           return true;
-      }
-      console.log("Please enter a number 1-10");
-      return false;
+        }
+        return false;
       }
     },
     {
@@ -70,22 +71,17 @@ function itemPurchase(){
       name: "stock_quantity",
       message: "How many would you like to purchase?",
       validate: function(value) {
-        if (isNaN(value) === false && parseInt(value) > 0 && parseInt(value) <= 10) {
+        if (isNaN(value) === false) {
           return true;
-      }
-      console.log("Please enter a number 1-10");
-      return false;
+        }
+        return false;
       }
     }
  ])
-}
+};
 //Once the customer has placed the order, your application should check if your store has enough of the product to meet the customer's request.
 //If not, the app should log a phrase like Insufficient quantity!, and then prevent the order from going through.
 
 //However, if your store does have enough of the product, you should fulfill the customer's order.
 //This means updating the SQL database to reflect the remaining quantity.
 //Once the update goes through, show the customer the total cost of their purchase.
-
-
-   
-
