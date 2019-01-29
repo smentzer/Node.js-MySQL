@@ -61,12 +61,13 @@ function itemPurchase(){
       type: "input",
       name: "id",
       message: "What item would you like to purchase?",
-      validate: function(value) {
-        if (isNaN(value) === false) {
-          return true;
+      validate: function (value) {
+        if (isNaN(value) === false && parseInt(value) > 0 && parseInt(value) <= 10) {
+            return true;
         }
+        console.log(" please enter a number 1-10")
         return false;
-      }
+    }
     },
     {
       type: "input",
