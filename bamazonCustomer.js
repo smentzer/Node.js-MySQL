@@ -31,21 +31,24 @@ connection.connect(function(err) {
 function afterConnected() {
   connection.query("SELECT * FROM products", function(err, res) {
     if (err) throw err;
-    for (var i = 0; i < res.length; i++) {
-      console.log(
-        " ID: " +
-        res[i].id +
-          " | " +
-          res[i].product_name +
-          " | " +
-          res[i].department_name +
-          " | $ " +
-          res[i].price +
-          " | Available: " +
-          res[i].stock_quantity
-          + " | "
-      );
-    }
+   
+      // console.log(
+      //   " ID: " +
+      //   res[i].id +
+      //     " | " +
+      //     res[i].product_name +
+      //     " | " +
+      //     res[i].department_name +
+      //     " | $ " +
+      //     res[i].price +
+      //     " | Available: " +
+      //     res[i].stock_quantity
+      //     + " | "
+      // );
+
+
+      console.table(res)
+    
   
     dataArr = res;
     //run after display
@@ -82,27 +85,40 @@ function itemPurchase(){
       }
     }
  ]).then (function (answers) {
+   //Once the customer has placed the order, your application should check if your store has enough of the product to meet the customer's request.
   if (parseInt(answers.stock_quantity) > dataArr[answers.id - 1].stock_quantity) {
+    //If not, the app should log a phrase like Insufficient quantity!, and then prevent the order from going through.
     console.log("Insufficient Quantity! There are only " + dataArr[answers.id - 1].stock_quantity + " left in stock!")
-      ItemPurchase();
+      itemPurchase();
+  } else {
+    //However, if your store does have enough of the product, you should fulfill the customer's order.
+    //Once the update goes through, show the customer the total cost of their purchase.
+    console.log("Order Placed: " + (parseInt(answers.stock_quantity) * dataArr[answers.id - 1].price));
+    var newQuantity = (dataArr[answers.id - 1].stock_quantity) - (parseInt(answers.stock_quantity));
+    // console.log(newQuantity);
+    connection.query("UPDATE products SET stock_quantity = ? WHERE id = ?", [newQuantity, answers.id], function(err){
+      if (err) throw err;
+      newOrder();
+    });
   }
-
-  
  })
-
-
-
-
-
-
-
-
-
-
-
-
 };
 
+function newOrder() {
+  inquirer.prompt ({
+    name: "yn",
+    type: "list",
+    message: "Would you like to place another order? ",
+    choices: ["YES", "NO"]
+  }).then (function(answer){
+    if( answer.yn === "YES") {
+      afterConnected();
+    } else connection.end();
+  }).catch(function (err) {
+    console.log(err);
+  })
+
+}
 
 
 
@@ -130,12 +146,14 @@ function itemPurchase(){
 
 
 
-//Once the customer has placed the order, your application should check if your store has enough of the product to meet the customer's request.
-//If not, the app should log a phrase like Insufficient quantity!, and then prevent the order from going through.
 
-//However, if your store does have enough of the product, you should fulfill the customer's order.
+
+
+
+
+
 //This means updating the SQL database to reflect the remaining quantity.
-//Once the update goes through, show the customer the total cost of their purchase.
+
 
 
 
