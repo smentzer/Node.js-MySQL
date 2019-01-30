@@ -5,3 +5,15 @@ Bamazon in action:
 -display all of the items available for sale
 <img src="images/itemDisplay.png">
 
+
+-Insufficient Quantity
+<img src="images/insufficientQuantity.png">
+
+-Order placed
+<img src="images/orderPlaced.png">
+
+-Second order
+<img src="images/secondOrder.png">
+
+-Database updated 
+<img src="images/updatedDB.png">
