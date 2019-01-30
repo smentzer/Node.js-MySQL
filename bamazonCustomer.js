@@ -52,6 +52,7 @@ function afterConnected() {
     itemPurchase();
   
   });
+};
 
 
 //The app should then prompt users with two messages-
@@ -80,8 +81,17 @@ function itemPurchase(){
         return false;
       }
     }
- ])
-}
+ ]).then (function (answers) {
+  if (parseInt(answers.stock_quantity) > dataArr[answers.id - 1].stock_quantity) {
+    console.log("Insufficient Quantity! There are only " + dataArr[answers.id - 1].stock_quantity + " left in stock!")
+      ItemPurchase();
+  }
+
+  
+ })
+
+
+
 
 
 
@@ -92,6 +102,34 @@ function itemPurchase(){
 
 
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //Once the customer has placed the order, your application should check if your store has enough of the product to meet the customer's request.
 //If not, the app should log a phrase like Insufficient quantity!, and then prevent the order from going through.
 
